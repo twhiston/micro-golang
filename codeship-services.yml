@@ -7,4 +7,3 @@ services:
     build:
       context: ./tests
       dockerfile: Dockerfile
-    image: twhiston/micro-golang:test-build
