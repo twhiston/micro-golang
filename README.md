@@ -1,4 +1,5 @@
 # Microservice container for golang
+[ ![Codeship Status for twhiston/micro-golang](https://app.codeship.com/projects/cb4b5360-2c28-0135-d4a4-7229e0f954fc/status?branch=master)](https://app.codeship.com/projects/224201)
 
 Super light alpine container for golang microservices.
 Includes testing context to use in ci builds
