@@ -1,0 +1,6 @@
+NS = tomwhiston
+VERSION ?= test
+
+REPO = micro-golang
+NAME = micro-golang
+INSTANCE = head

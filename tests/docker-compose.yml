@@ -1,0 +1,12 @@
+version: "2"
+
+services:
+  micro_container_test:
+    # Additional build context options compared to prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tomwhiston/micro-golang-test:latest
+    volumes:
+        - ./:/go/src/app
+    #entrypoint: /go/scripts/hold.sh
