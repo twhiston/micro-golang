@@ -25,7 +25,7 @@ To use the container to compile and run your app add a dockerfile to your projec
 
 _Dockerfile_
 ```
-FROM pwcsexperiencecenter/micro-golang:prod
+FROM tomwhiston/micro-golang:prod
 ```
 
 If your app exposes no ports, and needs nothing else this is all you need to do.
@@ -62,7 +62,7 @@ To run the testing version locally is almost identical to the prod version
 
 _Dockerfile-test_
 ```
-FROM pwcsexperiencecenter/micro-golang:test
+FROM tomwhiston/micro-golang:test
 
 # Customize as needed, normally can be exactly the same as your prod file
 ```
@@ -87,7 +87,7 @@ also use this container as follows
 
 _Dockerfile-test_
 ```
-FROM pwcsexperiencecenter/micro-golang:test
+FROM tomwhiston/micro-golang:test
 
 # Customize as needed, normally can be exactly the same as your prod file
 ```
