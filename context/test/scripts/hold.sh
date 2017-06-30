@@ -2,7 +2,7 @@
 
 echo "Run ./cleanup.sh when you are done to allow container to finish."
 
-pushd /go
+pushd /tmp
     echo "rm .jet.lock ; echo Waiting for shutdown..." > ./cleanup.sh
     chmod +x cleanup.sh
 

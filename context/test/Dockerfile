@@ -32,9 +32,7 @@ RUN apk add --no-cache -U libc-dev git go bash && \
 # Runtime Scripts
 ########################################################################################################################
 COPY ./scripts /go/scripts
-RUN chmod -R +x /go/scripts && \
-    chown -R 1001:0 /go && \
-    chown -R 1001:0 /go/scripts
+RUN chmod -R +x /go/scripts
 
 ########################################################################################################################
 # APPLICATION
@@ -42,6 +40,7 @@ RUN chmod -R +x /go/scripts && \
 #Copy the source code
 ONBUILD COPY ./ /go/src/app
 ONBUILD RUN go get -v app
+
 
 #Our test script is run in this instance
 #You could override this with /go/scripts/hold.sh to hold the container open for debug
