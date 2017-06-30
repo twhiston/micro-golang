@@ -32,7 +32,9 @@ RUN apk add --no-cache -U libc-dev git go bash && \
 # Runtime Scripts
 ########################################################################################################################
 COPY ./scripts /go/scripts
-RUN chmod -R +x /go/scripts
+RUN chmod -R +x /go/scripts && \
+    chown -R 1001:0 /go
+    chown -R 1001:0 /go/scripts
 
 ########################################################################################################################
 # APPLICATION
