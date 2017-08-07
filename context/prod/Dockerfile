@@ -4,7 +4,7 @@
 ########################################################################################################################
 FROM alpine:3.6
 
-MAINTAINER Tom Whiston <tom.whiston@google.com>
+MAINTAINER Tom Whiston <tom.whiston@gmail.com>
 
 ENV GOROOT=/usr/lib/go \
     GOPATH=/go \
