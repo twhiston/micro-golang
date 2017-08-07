@@ -9,6 +9,7 @@ This allows us to keep the image extremely light. A small golang app will be ~10
 
 The dockerfile in the root of you project can be used to build and deploy applications on openshift, sloppy.io etc....
 
+
 ## Contexts
 
 ### Prod
