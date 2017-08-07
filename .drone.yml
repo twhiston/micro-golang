@@ -1,6 +1,5 @@
 pipeline:
   build:
-    context: ./tests
-    dockerfile: Dockerfile
-    commands:
-      - /go/scripts/test.sh
+    image: tomwhiston/micro-golang:drone
+  commands:
+    - cd tests && go test

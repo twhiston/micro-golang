@@ -1,0 +1,6 @@
+NS = tomwhiston
+VERSION ?= drone
+
+REPO = micro-golang
+NAME = micro-golang
+INSTANCE = head
