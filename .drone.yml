@@ -1,0 +1,6 @@
+pipeline:
+  build:
+    context: ./tests
+    dockerfile: Dockerfile
+    commands:
+      - /go/scripts/test.sh
