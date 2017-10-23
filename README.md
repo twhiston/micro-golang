@@ -35,7 +35,7 @@ Commonly you might want to expose a port
 EXPOSE 8000
 ```
 
-Because it copies in your app at ONBUILD time you need to create a descendant docker image from it, thus running `docker run pwcsexperiencecenter/micro-golang:testing` will just result in an error that no source exists
+Because it copies in your app at ONBUILD time you need to create a descendant docker image from it, thus running `docker run tomwhiston/micro-golang:testing` will just result in an error that no source exists
 
 If required you could also create a docker compose as follows
 
