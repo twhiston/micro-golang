@@ -3,9 +3,10 @@
 set -e
 
 postCoverage() {
+    rv=$?
     echo "---> Export Golang Test Coverage to Codacy"
     godacov -t ${CODACY_TOKEN} -r ./coverage.out -c ${CI_COMMIT_ID}
-    exit $?
+    exit rv
 }
 
 trap "postCoverage" INT TERM EXIT
