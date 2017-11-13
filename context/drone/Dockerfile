@@ -20,13 +20,14 @@ WORKDIR /go/src/app
 # We also leave the things needed to compile go apps in the container, unlike the production container
 # as we need these to run the go test app etc....
 ########################################################################################################################
-RUN apk add --no-cache -U libc-dev git go bash && \
-  go get -v -d -u golang.org/x/tools/cmd/cover && \
-  go install golang.org/x/tools/cmd/cover && \
-  #This must be donde manually on alpine as it does not install directly in the tools dir
-  mv /go/bin/cover /usr/lib/go/pkg/tool/linux_amd64 && \
-  go get -v -u github.com/alecthomas/gometalinter && \
-  /go/bin/gometalinter --install
+RUN apk add --no-cache -U libc-dev git go bash cmake make clang && \
+    go get github.com/schrej/godacov && \
+    go get -u github.com/haya14busa/goverage && \
+    go get -v -d -u golang.org/x/tools/cmd/cover && \
+    go install golang.org/x/tools/cmd/cover && \
+    mv /go/bin/cover /usr/lib/go/pkg/tool/linux_amd64 && \
+    go get -v -u github.com/alecthomas/gometalinter && \
+    /go/bin/gometalinter --install
 
 ########################################################################################################################
 # Runtime Scripts

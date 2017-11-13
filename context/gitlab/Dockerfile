@@ -19,13 +19,13 @@ WORKDIR /go/src/app
 # Installing test tools at this point means we increase the speed of ci runs as it only needs to build the final app
 # We also leave the things needed to compile go apps in the container, unlike the production container
 # as we need these to run the go test app etc....
+# cover must be put in place manually on alpine as it does not install directly in the tools dir
 ########################################################################################################################
 RUN apk add --no-cache -U libc-dev git go bash cmake make clang && \
     go get github.com/schrej/godacov && \
     go get -u github.com/haya14busa/goverage && \
     go get -v -d -u golang.org/x/tools/cmd/cover && \
     go install golang.org/x/tools/cmd/cover && \
-    #This must be done manually on alpine as it does not install directly in the tools dir
     mv /go/bin/cover /usr/lib/go/pkg/tool/linux_amd64 && \
     go get -v -u github.com/alecthomas/gometalinter && \
     /go/bin/gometalinter --install
@@ -36,14 +36,6 @@ RUN apk add --no-cache -U libc-dev git go bash cmake make clang && \
 COPY ./scripts /go/scripts
 RUN chmod -R +x /go/scripts
 
-########################################################################################################################
-# APPLICATION
-########################################################################################################################
-#Copy the source code
-ONBUILD COPY ./ /go/src/app
-ONBUILD RUN go get -v -t app
-
-
 #Our test script is run in this instance
 #You could override this with /go/scripts/hold.sh to hold the container open for debug
-ENTRYPOINT ["/go/scripts/test.sh"]
+CMD ["/go/scripts/test.sh"]

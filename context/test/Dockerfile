@@ -23,7 +23,7 @@ WORKDIR /go/src/app
 RUN apk add --no-cache -U libc-dev git go bash && \
   go get -v -d -u golang.org/x/tools/cmd/cover && \
   go install golang.org/x/tools/cmd/cover && \
-  #This must be donde manually on alpine as it does not install directly in the tools dir
+  #This must be done manually on alpine as it does not install directly in the tools dir
   mv /go/bin/cover /usr/lib/go/pkg/tool/linux_amd64 && \
   go get -v -u github.com/alecthomas/gometalinter && \
   /go/bin/gometalinter --install
@@ -39,7 +39,7 @@ RUN chmod -R +x /go/scripts
 ########################################################################################################################
 #Copy the source code
 ONBUILD COPY ./ /go/src/app
-ONBUILD RUN go get -v app
+ONBUILD RUN go get -v -t app
 
 
 #Our test script is run in this instance

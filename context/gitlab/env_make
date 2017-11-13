@@ -1,0 +1,6 @@
+NS = tomwhiston
+VERSION ?= gitlab
+
+REPO = micro-golang
+NAME = micro-golang
+INSTANCE = head
