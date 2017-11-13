@@ -1,6 +1,8 @@
 # Microservice container for golang
 [ ![Codeship Status for twhiston/micro-golang](https://app.codeship.com/projects/cb4b5360-2c28-0135-d4a4-7229e0f954fc/status?branch=master)](https://app.codeship.com/projects/224201)
 
+Version 2
+
 Super light alpine container for golang microservices.
 Includes testing context to use in ci builds
 
@@ -20,7 +22,6 @@ Images are usually around the size of:
 
 - go binary size + ~4MB
 - (comparison) golang alpine ~230MB
-
 
 To use the container to compile and run your app add a dockerfile to your project root
 
@@ -54,6 +55,13 @@ If using docker-compose you will want to rebuild the container each time you run
 
 ### Testing
 
+Test images perform various actions as configured by the test.sh script.
+If you include a .mgl folder in your project the test container will pick up various scripts and execute them for you
+
+There are also some default actions which are controlled by env vars
+
+
+
 Installs cover and gometalinter. Build process leaves full go and gcc installed as it is needed for coverage.
 This means that image sizes will be significantly larger than production versions.
 You can easily orchestrate this using a ci such as codeship or jenkins
@@ -79,6 +87,36 @@ services:
       context: .
       dockerfile: Dockerfile-test
     image: myorg/mypackage:latest
+```
+
+### Gitlab
+
+TODO - REMAP CID variable so test script works correctly
+```
+image: tomwhiston/micro-golang:test
+
+before_script:
+  - mkdir -p $GOPATH/src/github.com/$CI_PROJECT_NAMESPACE/
+  - ln -s $CI_PROJECT_DIR $GOPATH/src/github.com/$CI_PROJECT_PATH
+  - cd $GOPATH/src/github.com/$CI_PROJECT_PATH
+  - go get -v
+
+stages:
+  - test
+
+goverage:
+  stage: test
+  script:
+    - /go/bin/goverage -v -coverprofile=coverage.out ./...
+  tags:
+    - my_docker_or_kubernetes_image_runner
+
+gometalinter:
+  stage: test
+  script:
+    - /go/bin/gometalinter --exclude \w*_test\w* ./...
+  tags:
+    - my_docker_or_kubernetes_image_runner
 ```
 
 ### Alternative testing instructions
@@ -121,49 +159,5 @@ This allows you to run tests within a near deployment environment without the ov
 
 Either make your own version of the container or override `/go/scripts` by mounting a volume over the top of it with a file called `test.sh` in it
 
-### Drone
+### Test-Onbuild
 
-Use in drone with a .drone.yml similar to the following
-
-```
-pipeline:
-  build:
-    image: tomwhiston/micro-golang:drone
-    commands:
-      - cd tests && go test
-```
-
-### Gitlab
-
-Easy to use container for gitlab testing. Should be used with a configuration similar to the following
-
-```
-image: tomwhiston/micro-golang:gitlab
-
-before_script:
-  - mkdir -p $GOPATH/src/github.com/$CI_PROJECT_NAMESPACE/
-  - ln -s $CI_PROJECT_DIR $GOPATH/src/github.com/$CI_PROJECT_PATH
-  - cd $GOPATH/src/github.com/$CI_PROJECT_PATH
-  - go get -v
-
-stages:
-  - test
-
-goverage:
-  stage: test
-  script:
-    - /go/bin/goverage -v -coverprofile=coverage.out ./...
-  tags:
-    - my_docker_or_kubernetes_image_runner
-
-gometalinter:
-  stage: test
-  script:
-    - /go/bin/gometalinter --exclude \w*_test\w* ./...
-  tags:
-    - my_docker_or_kubernetes_image_runner
-```
-
-## Limitations
-
-If you need extra libraries to be installed before `go get` and `go build` are called then you will need to create your own image using this Dockerfile as a guide.

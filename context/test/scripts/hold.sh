@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-echo "Run ./cleanup.sh when you are done to allow container to finish."
+echo "Run ./scripts/cleanup.sh when you are done to allow container to finish."
 
 pushd /tmp
-    echo "rm .jet.lock ; echo Waiting for shutdown..." > ./cleanup.sh
-    chmod +x cleanup.sh
+    echo "rm .mgl.lock ; echo Waiting for shutdown..." > ./scripts/cleanup.sh
+    chmod +x scripts/cleanup.sh
 
-    touch .jet.lock
+    touch .mgl.lock
 
     # check the lock file every five seconds.
-    while [ -f ".jet.lock" ]
+    while [ -f ".mgl.lock" ]
     do
         sleep 5
     done
