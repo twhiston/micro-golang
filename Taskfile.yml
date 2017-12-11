@@ -1,0 +1,28 @@
+all:
+  cmds:
+    - task: clean
+    - task: build
+    - task: testenv
+
+clean:
+  cmds:
+    - |
+      {{ $list :=  .VERSIONS | splitLines }}
+      {{range $i, $version := $list }}
+         docker rmi "{{ $.NS }}/{{ $.REPO }}:{{$version}}"
+      {{end}}
+
+build:
+  cmds:
+    - |
+      {{range $i, $version := .VERSIONS | splitLines }}
+         {{ if $version }}docker build -t "{{ $.NS }}/{{ $.REPO }}:{{$version}}" ./context/{{ $version | replace "-" "/" }}{{end}}
+      {{ end }}
+
+testenv:
+  deps: [build]
+  cmds:
+    - |
+      {{range $i, $version := .ENVTESTS | splitLines }}
+          {{ if $version }}cd ./context/{{ $version | replace "-" "/" }} && dgoss run -it "{{ $.NS }}/{{ $.REPO }}:{{$version}}" /bin/ash{{end}}
+      {{ end }}

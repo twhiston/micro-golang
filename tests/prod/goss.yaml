@@ -1,0 +1,15 @@
+file:
+  /usr/local/bin/app:
+    exists: true
+    mode: "0755"
+    owner: 'nonroot'
+    group: root
+    filetype: file
+  /usr/local/go/bin/go:
+    exists: false
+command:
+  app:
+    exit-status: 0
+    stderr:
+    - hello anonymous weirdo
+    timeout: 10000

@@ -5,6 +5,7 @@ import (
 )
 
 func main() {
+    log.SetFlags(0)
 	Greet("anonymous weirdo")
 }
 

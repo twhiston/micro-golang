@@ -3,14 +3,20 @@
 
 Version 2
 
-Super light alpine container for golang microservices.
-Includes testing context to use in ci builds
+Alpine 3.7
+Golang 1.9
+
+Super lightweight ONBUILD containers for golang applications. Includes testing contexts. 
+Golang dependencies are installed via dep if available, otherwise go get is used. Does not support glide for dependencies as its deprecated.
 
 To minimize final image size, and to work around image caching this docker image will install docker, get dependencies and build your app, and uninstall go ONBUILD
 This allows us to keep the image extremely light. A small golang app will be ~10MB, using the golang alpine image it will be ~200MB
+Alternatively if your build system supports it there is a multistep ONBUILD version of the production container.
 
-The dockerfile in the root of you project can be used to build and deploy applications on openshift, sloppy.io etc....
+The image by default runs as nonroot (1001) to support deployment using openshift etc... out of the box
 
+
+below this point does not represent v2, which is still under alpha development and may be broken 
 
 ## Contexts
 

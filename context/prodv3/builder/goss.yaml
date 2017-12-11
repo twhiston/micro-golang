@@ -1,0 +1,16 @@
+file:
+  /usr/local/bin/go-wrapper:
+    exists: true
+    mode: "0775"
+    size: 2478
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+command:
+  go version:
+    exit-status: 0
+    stdout:
+    - "/go version/"
+    stderr: []
+    timeout: 10000

@@ -27,12 +27,13 @@ fi
 
 if [[ "$MGL_INSTALL" == "true" ]]; then
     echo "---> Installing Application"
+    #TODO - test for dep file and if not use go get
     go get -v -t app
 fi
 
 if [ -f ${MGL_SCRIPT_PRE_RUN} ]; then
     echo "---> Running pre-run script"
-#    source <(echo  ${MGL_SCRIPT_PRE_RUN})
+    source ${MGL_SCRIPT_PRE_RUN}
 fi
 
 if [[ "$MGL_TEST" == "true" ]]; then

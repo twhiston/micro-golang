@@ -1,6 +1,12 @@
+ifneq ($(MAKECMDGOALS),test)
 include ./context/$(context)/env_make
+else
+include ./tests/env_make
+endif
 
-.PHONY: build push shell run start stop rm release
+.PHONY: build push shell run start stop rm release buildtest test clean default all
+
+all: clean build push
 
 build:
 	docker build -t $(NS)/$(REPO):$(VERSION) ./context/$(context)
@@ -25,5 +31,15 @@ rm:
 
 release: build
 	make push -e VERSION=$(VERSION)
+
+buildtest:
+	docker build -t $(NS)/$(REPO):$(VERSION) ./tests
+
+
+test: buildtest
+	  docker run --rm $(NS)/$(REPO):$(VERSION)
+
+clean:
+	docker rmi -f $(shell docker inspect --format="{{.Id}}" $(NS)/$(REPO):$(VERSION) )
 
 default: build
