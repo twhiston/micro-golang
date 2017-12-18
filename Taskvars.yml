@@ -1,7 +1,6 @@
 NS: tomwhiston
 REPO: micro-golang
 NAME: micro-golang
-
 VERSIONS: |
   prod
   prodv3-builder
