@@ -8,6 +8,7 @@ VERSIONS: |
   test-base
   test
 ENVTESTS: |
+  prod
   prodv3-builder
   prodv3-runtime
   test-base

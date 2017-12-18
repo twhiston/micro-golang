@@ -1,0 +1,15 @@
+package:
+  bash:
+    installed: false
+  clang:
+    installed: false
+  cmake:
+    installed: false
+  git:
+    installed: false
+  go:
+    installed: false
+  libc-dev:
+    installed: false
+  make:
+    installed: false

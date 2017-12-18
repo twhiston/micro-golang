@@ -1,0 +1,24 @@
+file:
+  /usr/local/bin/app:
+    # gets added at ONBUILD time instead
+    exists: false
+package:
+  git:
+    installed: false
+  go:
+    installed: false
+  libc-dev:
+    installed: false
+user:
+  nonroot:
+    exists: true
+    uid: 1001
+    gid: 0
+    groups:
+    - root
+    home: /go
+    shell: /sbin/halt
+group:
+  root:
+    exists: true
+    gid: 0

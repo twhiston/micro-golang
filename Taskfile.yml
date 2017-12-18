@@ -3,7 +3,7 @@ all:
     - task: lint
     - task: clean
     - task: build
-    - task: testenv
+    - task: test:env
 
 lint:
   cmds:
@@ -31,10 +31,14 @@ build:
          {{ if $version }}docker build -t "{{ $.NS }}/{{ $.REPO }}:{{ $version }}" ./context/{{ $version | replace "-" "/" }}{{ end }}
       {{ end -}}
 
-testenv:
+test:env:
   deps: [build]
   cmds:
     - |
       {{- range $i, $version := .ENVTESTS | splitLines -}}
-          {{ if $version }}cd ./context/{{ $version | replace "-" "/" }} && dgoss run -it "{{ $.NS }}/{{ $.REPO }}:{{ $version }}" /bin/ash{{ end }}
+          {{ if $version }}
+            pushd ./context/{{ $version | replace "-" "/" }}
+              dgoss run -it "{{ $.NS }}/{{ $.REPO }}:{{ $version }}" /bin/ash
+            popd
+          {{ end }}
       {{ end -}}
