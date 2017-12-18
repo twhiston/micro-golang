@@ -1,5 +1,5 @@
 NS = tomwhiston
-VERSION ?= drone
+VERSION ?= v1-drone
 
 REPO = micro-golang
 NAME = micro-golang

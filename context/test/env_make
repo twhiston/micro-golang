@@ -1,5 +1,5 @@
 NS = tomwhiston
-VERSION ?= test
+VERSION ?= v1-test
 
 REPO = micro-golang
 NAME = micro-golang

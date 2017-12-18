@@ -1,5 +1,5 @@
 NS = tomwhiston
-VERSION ?= codacy
+VERSION ?= v1-codacy
 
 REPO = micro-golang
 NAME = micro-golang
