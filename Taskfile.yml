@@ -4,17 +4,18 @@ all:
     - task: clean
     - task: build
     - task: test:env
+#    - task: test:integration
 
 lint:
   cmds:
     - |
       {{- $list :=  .VERSIONS | splitLines -}}
+      set -e
       {{- range $i, $version := $list -}}
          {{ if $version }}hadolint ./context/{{ $version | replace "-" "/" }}/Dockerfile{{ end }}
       {{ end -}}
-    - |
-      shellcheck ./context/test/base/scripts/hold.sh
-      shellcheck ./context/test/base/scripts/test.sh
+    - shellcheck ./context/test/base/scripts/hold.sh
+    - shellcheck ./context/test/base/scripts/test.sh
 
 clean:
   cmds:
@@ -27,6 +28,7 @@ clean:
 build:
   cmds:
     - |
+      set -e
       {{- range $i, $version := .VERSIONS | splitLines -}}
          {{ if $version }}docker build -t "{{ $.NS }}/{{ $.REPO }}:{{ $version }}" ./context/{{ $version | replace "-" "/" }}{{ end }}
       {{ end -}}
@@ -42,3 +44,18 @@ test:env:
             popd
           {{ end }}
       {{ end -}}
+
+
+test:integration:
+  deps: [build]
+  cmds:
+    - task: test:integration:build
+    - task: test:integration:test
+
+test:integration:build:
+  cmds:
+    - docker build -t tomwhiston/micro-golang-integration-test:{{ $version | replace "-" "/" }} .
+
+test:integration:test:
+  cmds:
+    - dgoss run -it "tomwhiston/micro-golang-integration-test:{{ $version | replace "-" "/" }}" /bin/ash

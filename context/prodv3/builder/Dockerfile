@@ -2,6 +2,11 @@ FROM alpine:3.7
 
 LABEL maintainer="tom.whiston@gmail.com"
 
+ENV GOROOT=/usr/lib/go \
+    GOPATH=/go \
+    GOBIN=/go/bin \
+    PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
 RUN apk add --no-cache -U libc-dev git go bash cmake make clang && \
     rm -rf /var/cache/apk/*
 
