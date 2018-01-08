@@ -29,8 +29,13 @@ fi
 
 if [[ "$MGL_INSTALL" == "true" ]]; then
     echo "---> Installing Application"
-    #TODO - test for dep file and if not use go get
-    go get -v -t app
+    if [ -e Gopkg.lock ]; then
+        echo "---> Using dep ensure"
+        dep ensure
+    else
+        echo "---> Using go get"
+        go get -v -t app
+    fi
 fi
 
 if [ -f "${MGL_SCRIPT_PRE_RUN}" ]; then

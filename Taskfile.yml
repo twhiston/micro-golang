@@ -3,15 +3,14 @@ all:
     - task: lint
     - task: clean
     - task: build
-    - task: test:env
-#    - task: test:integration
+    - task: test
 
 lint:
   cmds:
     - |
       {{- $list :=  .VERSIONS | splitLines -}}
       set -e
-      {{- range $i, $version := $list -}}
+      {{ range $i, $version := $list -}}
          {{ if $version }}hadolint ./context/{{ $version | replace "-" "/" }}/Dockerfile{{ end }}
       {{ end -}}
     - shellcheck ./context/test/base/scripts/hold.sh
@@ -22,16 +21,28 @@ clean:
     - |
       {{- $list :=  .VERSIONS | splitLines -}}
       {{- range $i, $version := $list -}}
-         {{ if $version }}docker rmi "{{ $.NS }}/{{ $.REPO }}:{{ $version }}"{{ end }}
+         {{ if $version }}docker rmi "{{ $.NS }}/{{ $.REPO }}:{{ $version }}" 2> /dev/null{{ end }}
       {{end -}}
 
 build:
   cmds:
     - |
       set -e
-      {{- range $i, $version := .VERSIONS | splitLines -}}
+      {{ range $i, $version := .VERSIONS | splitLines -}}
          {{ if $version }}docker build -t "{{ $.NS }}/{{ $.REPO }}:{{ $version }}" ./context/{{ $version | replace "-" "/" }}{{ end }}
       {{ end -}}
+
+push:
+  cmds:
+    - |
+      {{ range $i, $version := .VERSIONS | splitLines -}}
+         {{ if $version }}docker push "{{ $.NS }}/{{ $.REPO }}:{{ $version }}"{{ end }}
+      {{ end -}}
+
+test:
+  cmds:
+   - task: test:env
+   - task: test:integration
 
 test:env:
   deps: [build]
@@ -49,13 +60,36 @@ test:env:
 test:integration:
   deps: [build]
   cmds:
-    - task: test:integration:build
-    - task: test:integration:test
+    - task: test:integration:test:nodep
+    - task: test:integration:test:dep
 
-test:integration:build:
+test:integration:build:nodep:
+  dir: tests/test
+  sources:
+    - tests/test-dep
+  method: checksum
   cmds:
-    - docker build -t tomwhiston/micro-golang-integration-test:{{ $version | replace "-" "/" }} .
+    - docker build -t tomwhiston/micro-golang-integration-test:nodep .
 
-test:integration:test:
+# run the test once in goss, so we can ensure the output is correct, and once as the default container command
+test:integration:test:nodep:
+  deps: ["test:integration:build:dep"]
+  dir: tests/test
   cmds:
-    - dgoss run -it "tomwhiston/micro-golang-integration-test:{{ $version | replace "-" "/" }}" /bin/ash
+    - dgoss run -it tomwhiston/micro-golang-integration-test:nodep /bin/ash
+    - docker run tomwhiston/micro-golang-integration-test:nodep
+
+test:integration:build:dep:
+  dir: tests/test-dep
+  sources:
+    - tests/test-dep
+  method: checksum
+  cmds:
+    - docker build -t tomwhiston/micro-golang-integration-test:dep .
+
+test:integration:test:dep:
+  deps: ["test:integration:build:dep"]
+  dir: tests/test-dep
+  cmds:
+    - dgoss run -it tomwhiston/micro-golang-integration-test:dep /bin/ash
+    - docker run tomwhiston/micro-golang-integration-test:dep

@@ -1,9 +1,0 @@
-# Codeship specific docker compose file
-version: "2"
-
-services:
-  micro_golang:
-    # Additional build context options compared to prod
-    build:
-      context: ./tests
-      dockerfile: Dockerfile

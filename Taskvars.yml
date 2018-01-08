@@ -2,7 +2,6 @@ NS: tomwhiston
 REPO: micro-golang
 NAME: micro-golang
 VERSIONS: |
-  toast
   prod
   prodv3-builder
   prodv3-runtime
@@ -13,7 +12,3 @@ ENVTESTS: |
   prodv3-builder
   prodv3-runtime
   test-base
-APPTESTS: |
-  prod
-  prodv3
-  test

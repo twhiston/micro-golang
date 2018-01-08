@@ -1,7 +1,1 @@
-dep in runtime
-
-testing for containers
-
-prod v3 with artifacts
-
-better make process
+Add dep check in prod etc... containers for install

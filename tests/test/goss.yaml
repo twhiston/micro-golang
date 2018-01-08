@@ -1,26 +1,16 @@
 file:
-  /go/bin/app:
-    exists: true
-    mode: "0755"
-    size: 2055840
-    owner: root
-    group: root
-    filetype: file
-    contains: []
 command:
-  app:
+  "cd /go/src/app && test.sh":
     exit-status: 0
-    stdout: []
+    stdout:
+      - pre-install script executed
+      - pre-run script executed
+      - post-run script executed
+      - exit script executed
+      - Using go get
+    timeout: 10000
+  "cd /go/src/app && go get app && go install && app":
+    exit-status: 0
     stderr:
-    - hello anonymous weirdo
-    timeout: 10000
-  go test app:
-    exit-status: 0
-    stdout: []
-    stderr: []
-    timeout: 10000
-  cd /go/src/app && test.sh:
-    exit-status: 0
-    stdout: []
-    stderr: []
+      - hello anonymous weirdo
     timeout: 10000

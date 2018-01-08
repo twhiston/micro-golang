@@ -1,3 +1,0 @@
-- name: test-app
-  service: micro_golang
-  command: /go/scripts/test.sh

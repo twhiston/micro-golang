@@ -1,0 +1,16 @@
+command:
+  "cd /go/src/app && test.sh":
+    exit-status: 0
+    stdout:
+    - pre-install script executed
+    - pre-run script executed
+    - post-run script executed
+    - exit script executed
+    - Using dep ensure
+    stderr: []
+    timeout: 10000
+  "cd /go/src/app && dep ensure && go install && app":
+    exit-status: 0
+    stderr:
+      - hello anonymous weirdo
+    timeout: 10000

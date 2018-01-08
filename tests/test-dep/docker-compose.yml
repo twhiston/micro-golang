@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: tomwhiston/micro-golang-integration-test:nodep
+    image: tomwhiston/micro-golang-integration-test:dep
     volumes:
         - ./:/go/src/app
     #entrypoint: /go/scripts/hold.sh
