@@ -5,7 +5,26 @@ all:
     - task: build
     - task: test
 
+ci:
+  cmds:
+   - task: clean
+   - task: build
+   - task: test
+
+
 lint:
+  cmds:
+    - task: lint:hadolint
+    - task: shellcheck
+
+lint:shellcheck:
+ cmds:
+    - shellcheck ./context/test/base/scripts/hold.sh
+    - shellcheck ./context/test/base/scripts/test.sh
+    - shellcheck ./context/prod/scripts/install.sh
+    - shellcheck ./context/prodv3/builder/scripts/install.sh
+
+lint:hadolint:
   cmds:
     - |
       {{- $list :=  .VERSIONS | splitLines -}}
@@ -13,15 +32,17 @@ lint:
       {{ range $i, $version := $list -}}
          {{ if $version }}hadolint ./context/{{ $version | replace "-" "/" }}/Dockerfile{{ end }}
       {{ end -}}
-    - shellcheck ./context/test/base/scripts/hold.sh
-    - shellcheck ./context/test/base/scripts/test.sh
+
 
 clean:
   cmds:
     - |
-      {{- $list :=  .VERSIONS | splitLines -}}
-      {{- range $i, $version := $list -}}
-         {{ if $version }}docker rmi "{{ $.NS }}/{{ $.REPO }}:{{ $version }}" 2> /dev/null{{ end }}
+      {{ range $i, $version := .VERSIONS | splitLines -}}
+         {{ if $version }}docker rmi "{{ $.NS }}/{{ $.REPO }}:{{ $version }}" -f || true {{ end }}
+      {{end -}}
+    - |
+      {{ range $i, $version := .INTEGRATIONTESTS | splitLines -}}
+        {{ if $version }}docker rmi "{{ $.NS }}/{{ $.REPO }}-{{ $.INTEGRATION_NAMESPACE }}:{{ $version }}" -f || true {{ end }}
       {{end -}}
 
 build:
@@ -52,45 +73,29 @@ test:env:
       {{ range $i, $version := .ENVTESTS | splitLines -}}
           {{ if $version }}
             pushd ./context/{{ $version | replace "-" "/" }}
-              dgoss run -it "{{ $.NS }}/{{ $.REPO }}:{{ $version }}" /bin/ash
+              GOSS_FILES_STRATEGY="cp" dgoss run -it "{{ $.NS }}/{{ $.REPO }}:{{ $version }}" /bin/ash
             popd
           {{ end }}
       {{ end -}}
 
-
 test:integration:
+  deps: [build]
   cmds:
-    - task: test:integration:test:nodep
-    - task: test:integration:test:dep
-    - task: test:integration:test:nodep
-    - task: test:integration:prod:dep
+    - |
+      set -e
+      {{ range $i, $version := .INTEGRATIONTESTS | splitLines -}}
+          {{ if $version }}
+            pushd ./tests/{{ $version }}
+              docker build -t "{{ $.NS }}/{{ $.REPO }}-{{ $.INTEGRATION_NAMESPACE }}:{{ $version }}" .
+              docker run "{{ $.NS }}/{{ $.REPO }}-{{ $.INTEGRATION_NAMESPACE }}:{{ $version }}"
+              GOSS_FILES_STRATEGY="cp" dgoss run -it "{{ $.NS }}/{{ $.REPO }}-{{ $.INTEGRATION_NAMESPACE }}:{{ $version }}" /bin/ash
+            popd
+          {{ end }}
+      {{ end -}}
 
-
-# run the test once in goss, so we can ensure the output is correct, and once as the default container command
-test:integration:test:nodep:
-  dir: tests/test
+ci:build:
   cmds:
-    - docker build -t tomwhiston/micro-golang-integration-test:nodep .
-    - docker run tomwhiston/micro-golang-integration-test:nodep
-    - dgoss run -it tomwhiston/micro-golang-integration-test:nodep /bin/ash
-
-test:integration:test:dep:
-  dir: tests/test-dep
-  cmds:
-    - docker build -t tomwhiston/micro-golang-integration-test:dep .
-    - docker run tomwhiston/micro-golang-integration-test:dep
-    - dgoss run -it tomwhiston/micro-golang-integration-test:dep /bin/ash
-
-test:integration:prod:nodep:
-  dir: tests/prod
-  cmds:
-    - docker build -t tomwhiston/micro-golang-integration-test:prod .
-    - docker run tomwhiston/micro-golang-integration-test:prod
-    - dgoss run -it tomwhiston/micro-golang-integration-test:prod /bin/ash
-
-test:integration:prod:dep:
-  dir: tests/prod-dep
-  cmds:
-    - docker build -t tomwhiston/micro-golang-integration-test:prod-dep .
-    - docker run tomwhiston/micro-golang-integration-test:prod-dep
-    - dgoss run -it tomwhiston/micro-golang-integration-test:prod-dep /bin/ash
+    - |
+      pushd ./ci
+        docker build -t "{{ $.NS }}/{{ $.REPO }}-ci:latest" .
+      popd

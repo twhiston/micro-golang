@@ -5,7 +5,7 @@ file:
     filetype: file
   /usr/local/go/bin/go:
     exists: false
-# gets removed at ONBUILD time
+  # gets removed at ONBUILD time
   /go/bin/dep:
     exists: false
   /go/scripts/install.sh:

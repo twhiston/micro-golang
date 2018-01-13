@@ -1,0 +1,10 @@
+# Codeship specific docker compose file
+version: "2"
+
+services:
+  dind:
+    add_docker: true
+    cached: true
+    build: ./ci
+    volumes:
+    - ./:/root/src

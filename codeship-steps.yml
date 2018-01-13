@@ -1,0 +1,5 @@
+- type: parallel
+  steps:
+    - name: run tasks
+      service: dind
+      command: task ci

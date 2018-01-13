@@ -12,3 +12,11 @@ ENVTESTS: |
   prodv3-builder
   prodv3-runtime
   test-base
+INTEGRATION_NAMESPACE: integration
+INTEGRATIONTESTS: |
+  prod
+  prod-dep
+  prodv3
+  prodv3-dep
+  test
+  test-dep

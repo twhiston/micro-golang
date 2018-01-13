@@ -13,10 +13,12 @@ To minimize final image size, and to work around image caching this docker image
 This allows us to keep the image extremely light. A small golang app will be ~10MB, using the golang alpine image it will be ~200MB
 Alternatively if your build system supports it there is a multistep ONBUILD version of the production container.
 
-The image by default runs as nonroot (1001) to support deployment using openshift etc... out of the box
+Production images include nonroot (1001) user to support deployment using openshift etc... out of the box.
+If using the `prodv3` image the runtime image will user 1001 by default, if using the `prod` image you should switch to user 1001 in YOUR descendent dockerfile
+so that the onbuild can run as root.
 
 
-below this point does not represent v2, which is still under alpha development and may be broken 
+# below this point does not represent v2, which is still under alpha development and may be broken
 
 ## Contexts
 

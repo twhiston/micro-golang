@@ -1,4 +1,5 @@
 #!/bin/ash
+# shellcheck shell=dash
 
 echo "---> Installing Application"
 if [ -e Gopkg.lock ]; then
