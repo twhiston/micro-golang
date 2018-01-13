@@ -58,7 +58,6 @@ test:env:
 
 
 test:integration:
-  deps: [build]
   cmds:
     - task: test:integration:test:nodep
     - task: test:integration:test:dep
@@ -66,14 +65,13 @@ test:integration:
 test:integration:build:nodep:
   dir: tests/test
   sources:
-    - tests/test-dep
-  method: checksum
+    - tests/test
   cmds:
     - docker build -t tomwhiston/micro-golang-integration-test:nodep .
 
 # run the test once in goss, so we can ensure the output is correct, and once as the default container command
 test:integration:test:nodep:
-  deps: ["test:integration:build:dep"]
+  deps: ["test:integration:build:nodep"]
   dir: tests/test
   cmds:
     - dgoss run -it tomwhiston/micro-golang-integration-test:nodep /bin/ash
@@ -83,7 +81,6 @@ test:integration:build:dep:
   dir: tests/test-dep
   sources:
     - tests/test-dep
-  method: checksum
   cmds:
     - docker build -t tomwhiston/micro-golang-integration-test:dep .
 
