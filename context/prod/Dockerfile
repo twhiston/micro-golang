@@ -15,9 +15,11 @@ ENV GOROOT=/usr/lib/go \
 # Prepare env for app
 ########################################################################################################################
 RUN mkdir -p /go/src/app && \
+    mkdir -p /go/scripts && \
     adduser -u 1001 -G root -h /go -D nonroot
 
 WORKDIR /go/src/app
+COPY scripts /go/scripts
 
 ########################################################################################################################
 # ONBUILD app install
@@ -26,7 +28,8 @@ WORKDIR /go/src/app
 ########################################################################################################################
 ONBUILD COPY ./ /go/src/app
 ONBUILD RUN apk add --no-cache -U libc-dev git go && \
-  go get -v app && \
+  go get -u github.com/golang/dep/cmd/dep && \
+  /go/scripts/install.sh && \
   mv /go/bin/app /usr/local/bin/ && \
   chown 1001:0 /usr/local/bin/app && \
   apk del libc-dev git go && \

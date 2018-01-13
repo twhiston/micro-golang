@@ -8,6 +8,7 @@ ENV GOROOT=/usr/lib/go \
     PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 RUN apk add --no-cache -U libc-dev git go bash cmake make clang && \
+    go get -u github.com/golang/dep/cmd/dep && \
     rm -rf /var/cache/apk/*
 
 WORKDIR /go/src/app
@@ -17,4 +18,4 @@ WORKDIR /go/src/app
 # This provides the minimum possible runtime image size
 ########################################################################################################################
 ONBUILD COPY ./ .
-ONBUILD RUN go get -v app
+ONBUILD RUN /go/scripts/install.sh

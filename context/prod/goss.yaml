@@ -2,6 +2,12 @@ file:
   /usr/local/bin/app:
     # gets added at ONBUILD time instead
     exists: false
+  /go/scripts/install.sh:
+      # gets removed at ONBUILD time
+      exists: true
+  /go/bin/dep:
+    # gets added and removed at ONBUILD time
+    exists: false
 package:
   git:
     installed: false

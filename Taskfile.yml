@@ -48,7 +48,8 @@ test:env:
   deps: [build]
   cmds:
     - |
-      {{- range $i, $version := .ENVTESTS | splitLines -}}
+      set -e
+      {{ range $i, $version := .ENVTESTS | splitLines -}}
           {{ if $version }}
             pushd ./context/{{ $version | replace "-" "/" }}
               dgoss run -it "{{ $.NS }}/{{ $.REPO }}:{{ $version }}" /bin/ash
@@ -61,32 +62,35 @@ test:integration:
   cmds:
     - task: test:integration:test:nodep
     - task: test:integration:test:dep
+    - task: test:integration:test:nodep
+    - task: test:integration:prod:dep
 
-test:integration:build:nodep:
-  dir: tests/test
-  sources:
-    - tests/test
-  cmds:
-    - docker build -t tomwhiston/micro-golang-integration-test:nodep .
 
 # run the test once in goss, so we can ensure the output is correct, and once as the default container command
 test:integration:test:nodep:
-  deps: ["test:integration:build:nodep"]
   dir: tests/test
   cmds:
-    - dgoss run -it tomwhiston/micro-golang-integration-test:nodep /bin/ash
+    - docker build -t tomwhiston/micro-golang-integration-test:nodep .
     - docker run tomwhiston/micro-golang-integration-test:nodep
-
-test:integration:build:dep:
-  dir: tests/test-dep
-  sources:
-    - tests/test-dep
-  cmds:
-    - docker build -t tomwhiston/micro-golang-integration-test:dep .
+    - dgoss run -it tomwhiston/micro-golang-integration-test:nodep /bin/ash
 
 test:integration:test:dep:
-  deps: ["test:integration:build:dep"]
   dir: tests/test-dep
   cmds:
-    - dgoss run -it tomwhiston/micro-golang-integration-test:dep /bin/ash
+    - docker build -t tomwhiston/micro-golang-integration-test:dep .
     - docker run tomwhiston/micro-golang-integration-test:dep
+    - dgoss run -it tomwhiston/micro-golang-integration-test:dep /bin/ash
+
+test:integration:prod:nodep:
+  dir: tests/prod
+  cmds:
+    - docker build -t tomwhiston/micro-golang-integration-test:prod .
+    - docker run tomwhiston/micro-golang-integration-test:prod
+    - dgoss run -it tomwhiston/micro-golang-integration-test:prod /bin/ash
+
+test:integration:prod:dep:
+  dir: tests/prod-dep
+  cmds:
+    - docker build -t tomwhiston/micro-golang-integration-test:prod-dep .
+    - docker run tomwhiston/micro-golang-integration-test:prod-dep
+    - dgoss run -it tomwhiston/micro-golang-integration-test:prod-dep /bin/ash
