@@ -5,10 +5,10 @@ set -e
 scriptExit() {
     rv=$?
 
-    if [ -f "${MGL_SCRIPT_EXIT}" ]; then
+    if [ -f "${MGL_CONFIG_PATH}/${MGL_SCRIPT_EXIT}" ]; then
         echo "---> Running exit script"
         # shellcheck source=/dev/null
-        source "${MGL_SCRIPT_EXIT}" $rv
+        source "${MGL_CONFIG_PATH}/${MGL_SCRIPT_EXIT}" $rv
     fi
 
     if [[ -n ${CODACY_TOKEN+x} ]]; then
@@ -21,10 +21,10 @@ scriptExit() {
 }
 trap "scriptExit" INT TERM EXIT
 
-if [ -f "${MGL_SCRIPT_PRE_INSTALL}" ]; then
+if [ -f "${MGL_CONFIG_PATH}/${MGL_SCRIPT_PRE_INSTALL}" ]; then
     echo "---> Running pre-install script"
     # shellcheck source=/dev/null
-    source "${MGL_SCRIPT_PRE_INSTALL}"
+    source "${MGL_CONFIG_PATH}/${MGL_SCRIPT_PRE_INSTALL}"
 fi
 
 if [[ "$MGL_INSTALL" == "true" ]]; then
@@ -38,10 +38,10 @@ if [[ "$MGL_INSTALL" == "true" ]]; then
     fi
 fi
 
-if [ -f "${MGL_SCRIPT_PRE_RUN}" ]; then
+if [ -f "${MGL_CONFIG_PATH}/${MGL_SCRIPT_PRE_RUN}" ]; then
     echo "---> Running pre-run script"
     # shellcheck source=/dev/null
-    source "${MGL_SCRIPT_PRE_RUN}"
+    source "${MGL_CONFIG_PATH}/${MGL_SCRIPT_PRE_RUN}"
 fi
 
 if [[ "${MGL_TEST}" == "true" ]]; then
@@ -51,16 +51,16 @@ fi
 
 if [[ "${MGL_LINT}" == "true" ]]; then
     echo "---> Run Gometalinter"
-    if [ -f "${MGL_LINT_CONFIG}" ]; then
+    if [ -f "${MGL_CONFIG_PATH}/${MGL_LINT_CONFIG}" ]; then
 	    echo "Using project configuration file"
-	    gometalinter --disable-all --config "${MGL_LINT_CONFIG}" ./...
+	    gometalinter --disable-all --config "${MGL_CONFIG_PATH}/${MGL_LINT_CONFIG}" ./...
     else
 	    gometalinter --vendor ./...
     fi
 fi
 
-if [ -f "${MGL_SCRIPT_POST_RUN}" ]; then
+if [ -f "${MGL_CONFIG_PATH}/${MGL_SCRIPT_POST_RUN}" ]; then
     echo "---> Running post-run script"
     # shellcheck source=/dev/null
-    source "${MGL_SCRIPT_POST_RUN}"
+    source "${MGL_CONFIG_PATH}/${MGL_SCRIPT_POST_RUN}"
 fi

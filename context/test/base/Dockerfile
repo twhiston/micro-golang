@@ -14,12 +14,12 @@ ENV GOROOT="/usr/lib/go" \
     MGL_TEST=true \
     MGL_LINT=true \
     PATH=${PATH}:/usr/lib/go/bin:/go/bin:/go/scripts \
-    MGL_CONFIG_PATH="/go/src/app/.mgl" \
-    MGL_LINT_CONFIG="/go/src/app/.mgl/gometalinter.json" \
-    MGL_SCRIPT_PRE_INSTALL="/go/src/app/.mgl/pre-install" \
-    MGL_SCRIPT_PRE_RUN="/go/src/app/.mgl/pre-run" \
-    MGL_SCRIPT_POST_RUN="/go/src/app/.mgl/post-run" \
-    MGL_SCRIPT_EXIT="/go/src/app/.mgl/exit"
+    MGL_CONFIG_PATH="/go/src/app/.mgl"
+ENV MGL_LINT_CONFIG="gometalinter.json" \
+    MGL_SCRIPT_PRE_INSTALL="pre-install" \
+    MGL_SCRIPT_PRE_RUN="pre-run" \
+    MGL_SCRIPT_POST_RUN="post-run" \
+    MGL_SCRIPT_EXIT="exit"
 
 RUN mkdir -p "${MGL_APP_ROOT}"
 WORKDIR ${MGL_APP_ROOT}

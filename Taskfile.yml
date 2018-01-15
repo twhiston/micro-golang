@@ -15,22 +15,23 @@ ci:
 lint:
   cmds:
     - task: lint:hadolint
-    - task: shellcheck
+    - task: lint:shellcheck
 
+# Ignore issues related to not using cd
 lint:shellcheck:
  cmds:
-    - shellcheck ./context/test/base/scripts/hold.sh
-    - shellcheck ./context/test/base/scripts/test.sh
-    - shellcheck ./context/prod/scripts/install.sh
-    - shellcheck ./context/prodv3/builder/scripts/install.sh
+    - shellcheck ./context/test/base/scripts/hold.sh -e SC2164
+    - shellcheck ./context/test/base/scripts/test.sh -e SC2164
+    - shellcheck ./context/prod/scripts/install.sh -e SC2164
+    - shellcheck ./context/prodv3/builder/scripts/install.sh -e SC2164
 
+# Ignore warning about pinning specific versions
 lint:hadolint:
   cmds:
     - |
-      {{- $list :=  .VERSIONS | splitLines -}}
       set -e
-      {{ range $i, $version := $list -}}
-         {{ if $version }}hadolint ./context/{{ $version | replace "-" "/" }}/Dockerfile{{ end }}
+      {{ range $i, $version := .VERSIONS | splitLines -}}
+         {{ if $version }}hadolint ./context/{{ $version | replace "-" "/" }}/Dockerfile --ignore=DL3018{{ end }}
       {{ end -}}
 
 
