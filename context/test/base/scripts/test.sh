@@ -31,7 +31,7 @@ if [[ "$MGL_INSTALL" == "true" ]]; then
     echo "---> Installing Application"
     if [ -e Gopkg.lock ]; then
         echo "---> Using dep ensure"
-        dep ensure
+        dep ensure -v
     else
         echo "---> Using go get"
         go get -v -t app
