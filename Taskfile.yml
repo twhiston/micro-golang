@@ -100,3 +100,21 @@ ci:build:
       pushd ./ci
         docker build -t "{{ $.NS }}/{{ $.REPO }}-ci:latest" .
       popd
+
+test:toolchain:
+  cmds:
+    - |
+      pushd ./tests/toolchain
+        docker build -t "{{ $.NS }}/{{ $.REPO }}:toolchain-test" .
+        docker run "{{ $.NS }}/{{ $.REPO }}:toolchain-test"
+        docker run "{{ $.NS }}/{{ $.REPO }}:toolchain-test" task
+        docker run "{{ $.NS }}/{{ $.REPO }}:toolchain-test" hk
+      popd
+
+toolchain:build:app:
+  cmds:
+    - |
+      set -e
+      pushd ./context/toolchain/mgl-tcb
+        go install
+      popd

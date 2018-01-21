@@ -1,0 +1,5 @@
+author: "Tom Whiston <tom.whiston@gmail.com>"
+version: "0.0.1"
+tools:
+  - github.com/go-task/task/cmd/task
+  - github.com/twhiston/hk
