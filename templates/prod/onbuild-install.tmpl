@@ -1,0 +1,14 @@
+########################################################################################################################
+# ONBUILD app install
+# This adds go, compiles your app and then uninstalls go again
+# This provides the minimum possible runtime image size
+########################################################################################################################
+ONBUILD COPY ./ /go/src/app
+ONBUILD RUN apk add --no-cache -U libc-dev git go && \
+go get -u github.com/golang/dep/cmd/dep && \
+/go/scripts/install.sh && \
+mv /go/bin/app /usr/local/bin/ && \
+chown 1001:0 /usr/local/bin/app && \
+apk del libc-dev git go && \
+rm -rf /go/* && \
+rm -rf /var/cache/apk/*

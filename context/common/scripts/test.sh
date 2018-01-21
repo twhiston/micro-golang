@@ -28,14 +28,7 @@ if [ -f "${MGL_CONFIG_PATH}/${MGL_SCRIPT_PRE_INSTALL}" ]; then
 fi
 
 if [[ "$MGL_INSTALL" == "true" ]]; then
-    echo "---> Installing Application"
-    if [ -e Gopkg.lock ]; then
-        echo "---> Using dep ensure"
-        dep ensure -v
-    else
-        echo "---> Using go get"
-        go get -v -t app
-    fi
+    source ./install.sh
 fi
 
 if [ -f "${MGL_CONFIG_PATH}/${MGL_SCRIPT_PRE_RUN}" ]; then
