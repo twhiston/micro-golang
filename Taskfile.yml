@@ -51,7 +51,7 @@ build:
     - |
       set -e
       {{ range $i, $version := .VERSIONS | splitLines -}}
-         {{ if $version }}docker build -t "{{ $.NS }}/{{ $.REPO }}:{{ $version }}" ./context/{{ $version | replace "-" "/" }}{{ end }}
+         {{ if $version }}docker build -t "{{ $.NS }}/{{ $.REPO }}:{{ $version }}{{ if $.BRANCH }}-{{ $.BRANCH }}{{ end }}" ./context/{{ $version | replace "-" "/" }}{{ end }}
       {{ end -}}
 
 push:
