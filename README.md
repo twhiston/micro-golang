@@ -132,3 +132,13 @@ Your ci will need to make the docker socket (or a dind service) available for th
 
 v1 images will remain on docker hub with the v1 prefix, but will no longer be supported or updated
 (this will not be done until v2 is released)
+
+### TODO
+
+Templating
+
+
+Test image is essentially a toolchain image, so remove it and add options in templates to manually run a go install, 
+or something else
+
+Should be able to be configured as an onbuild image

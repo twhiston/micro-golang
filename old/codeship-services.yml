@@ -5,6 +5,6 @@ services:
   dind:
     add_docker: true
     cached: true
-    build: ./ci
+    build: ci
     volumes:
     - ./:/root/src
