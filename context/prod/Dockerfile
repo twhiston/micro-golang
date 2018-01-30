@@ -2,23 +2,13 @@
 # Lightweight production container for golang apps
 # v1.0.0
 ########################################################################################################################
-FROM alpine:3.7
+FROM tomwhiston/micro-golang:base
 
 LABEL maintainer="tom.whiston@gmail.com"
-
-ENV GOROOT=/usr/lib/go \
-    GOPATH=/go \
-    GOBIN=/go/bin \
-    PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 ########################################################################################################################
 # Prepare env for app
 ########################################################################################################################
-RUN mkdir -p /go/src/app && \
-    mkdir -p /go/scripts && \
-    adduser -u 1001 -G root -h /go -D nonroot
-
-WORKDIR /go/src/app
 COPY scripts /go/scripts
 
 ########################################################################################################################

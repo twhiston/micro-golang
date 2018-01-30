@@ -2,27 +2,20 @@
 # Lightweight testing container for golang apps
 # v1.0.0
 ########################################################################################################################
-FROM alpine:3.7
+FROM tomwhiston/micro-golang:base
 
 LABEL maintainer="tom.whiston@gmail.com"
 
-ENV GOROOT="/usr/lib/go" \
-    GOPATH="/go" \
-    GOBIN="/go/bin" \
-    MGL_APP_ROOT="/go/src/app" \
+ENV MGL_APP_ROOT="/go/src/app" \
     MGL_INSTALL=true \
     MGL_TEST=true \
     MGL_LINT=true \
-    PATH=${PATH}:/usr/lib/go/bin:/go/bin:/go/scripts \
-    MGL_CONFIG_PATH="/go/src/app/.mgl"
-ENV MGL_LINT_CONFIG="gometalinter.json" \
+    MGL_CONFIG_PATH="/go/src/app/.mgl" \
+    MGL_LINT_CONFIG="gometalinter.json" \
     MGL_SCRIPT_PRE_INSTALL="pre-install" \
     MGL_SCRIPT_PRE_RUN="pre-run" \
     MGL_SCRIPT_POST_RUN="post-run" \
     MGL_SCRIPT_EXIT="exit"
-
-RUN mkdir -p "${MGL_APP_ROOT}"
-WORKDIR ${MGL_APP_ROOT}
 
 ########################################################################################################################
 # TESTING

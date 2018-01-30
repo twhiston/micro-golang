@@ -1,30 +1,20 @@
 ########################################################################################################################
 # Lightweight production container for golang apps
 # v1.0.0
-########################################################################################################################
-FROM alpine:3.7
+#######################################################################################################################
+FROM tomwhiston/micro-golang:base
 
 LABEL maintainer="tom.whiston@gmail.com"
 
-ENV GOROOT=/usr/lib/go \
-    GOPATH=/go \
-    GOBIN=/go/bin
-ENV PATH=$PATH:$GOROOT/bin:$GOBIN:/go/scripts \
-    TOOLCHAIN_FILE=/go/toolchain.yml
-
+ENV TOOLCHAIN_FILE=/go/toolchain.yml
 
 ########################################################################################################################
 # Prepare env for app
 ########################################################################################################################
-RUN mkdir -p /go/src/app && \
-    mkdir -p /go/scripts && \
-    adduser -u 1001 -G root -h /go -D nonroot
-
-WORKDIR /go
 COPY mgl-tcb /go/src/mgl-tcb
 COPY scripts /go/scripts
 
-RUN chmod -R +x /go/scripts && \
+RUN mkdir -p /go/work && \
     /go/scripts/make-default-entrypoint.sh && \
     rm /go/scripts/make-default-entrypoint.sh
 ########################################################################################################################
@@ -40,6 +30,7 @@ ONBUILD RUN apk add --no-cache -U libc-dev git go && \
   apk del libc-dev git go && \
   rm -rf /var/cache/apk/*
 
+WORKDIR /go/work
 ########################################################################################################################
 # Run the application
 # The app is arbitrarily called app due to the copy and build commands, which allows us to be generic

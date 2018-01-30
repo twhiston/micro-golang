@@ -1,14 +1,14 @@
 package main
 
 import (
-	"os/exec"
-	"os"
+	"flag"
 	"fmt"
-	"log"
-	"text/template"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"flag"
+	"log"
+	"os"
+	"os/exec"
+	"text/template"
 	"time"
 )
 
@@ -38,6 +38,7 @@ func main() {
 
 	file, err := ioutil.ReadFile(toolchainFilePath)
 	toolchainError(err, "read input file")
+
 
 	err = yaml.Unmarshal(file, &tc)
 	toolchainError(err, "unmarshall")
@@ -75,9 +76,9 @@ func main() {
 	}
 
 	//Get path or exit
-	gobin := os.Getenv("GOBIN")
+	gobin := os.Getenv("TOOLCHAIN_BIN")
 	if gobin == "" {
-		fmt.Println("	GOBIN variable is blank, leaving tools in install location")
+		fmt.Println("	TOOLCHAIN_BIN variable is blank, leaving tools in GOBIN")
 		return
 	}
 
