@@ -6,7 +6,12 @@ ENV GOROOT=/usr/lib/go \
     GOPATH=/go \
     GOBIN=/go/bin
 ENV PATH=$PATH:$GOROOT/bin:$GOBIN:$GOPATH/scripts \
-    LANG=C.UTF-8
+    LANG=C.UTF-8 \
+    MGL_APP_ROOT="/go/src/app" \
+    MGL_CONFIG_PATH="/go/src/app/.mgl" \
+    MGL_SCRIPT_PRE_INSTALL="pre-install" \
+    MGL_SCRIPT_POST_DEPS="post-deps" \
+    MGL_SCRIPT_POST_INSTALL="post-install"
 
 # Here we install GNU libc (aka glibc) and set C.UTF-8 locale as default.
 
@@ -45,5 +50,10 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
     mkdir -p /go/scripts && \
     chmod -R +x /go/scripts && \
     adduser -u 1001 -G root -h /go -D nonroot
+
+########################################################################################################################
+# Prepare env for app
+########################################################################################################################
+COPY scripts /go/scripts
 
 WORKDIR /go/src/app

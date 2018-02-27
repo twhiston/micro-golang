@@ -7,11 +7,6 @@ FROM tomwhiston/micro-golang:base
 LABEL maintainer="tom.whiston@gmail.com"
 
 ########################################################################################################################
-# Prepare env for app
-########################################################################################################################
-COPY scripts /go/scripts
-
-########################################################################################################################
 # ONBUILD app install
 # This adds go, compiles your app and then uninstalls go again
 # This provides the minimum possible runtime image size

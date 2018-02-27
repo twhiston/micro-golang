@@ -1,5 +1,5 @@
 # micro-golang
-##### A super lightweight microservice container for golang applications, including ci testing context
+##### A super lightweight microservice container for golang applications, including ci testing context and toolchain image
 Version 2
 
 [ ![Codeship Status for twhiston/micro-golang](https://app.codeship.com/projects/cb4b5360-2c28-0135-d4a4-7229e0f954fc/status?branch=master)](https://app.codeship.com/projects/224201)
@@ -86,11 +86,14 @@ The following environmental variables are set in the container and used to deter
 - MGL_CONFIG_PATH="/go/src/app/.mgl"
 - MGL_LINT_CONFIG="gometalinter.json"
 - MGL_SCRIPT_PRE_INSTALL="pre-install"
-- MGL_SCRIPT_PRE_RUN="pre-run"
-- MGL_SCRIPT_POST_RUN="post-run"
+- MGL_SCRIPT_POST_DEPS="post-deps" * only if install uses dep
+- MGL_SCRIPT_POST_INSTALL="post-run" * only in prod container
+- MGL_SCRIPT_PRE_RUN="pre-run" * only in test container
+- MGL_SCRIPT_POST_RUN="post-run" * only in test container
 - MGL_SCRIPT_EXIT="exit"
 
-`MGL_SCRIPT_*` variables are expected to point to scripts which can be sourced by `go/scripts/test.sh`
+
+`MGL_SCRIPT_*` variables are expected to point to scripts which can be sourced by `go/scripts/install.sh` and `go/scripts/test.sh`
 
 #### Test Flow
 

@@ -14,7 +14,9 @@ ENV TOOLCHAIN_FILE=/go/toolchain.yml
 COPY mgl-tcb /go/src/mgl-tcb
 COPY scripts /go/scripts
 
-RUN mkdir -p /go/work && \
+RUN apk add --no-cache -U git libc-dev go && \
+    rm -rf /var/cache/apk/* && \
+    mkdir -p /go/work && \
     /go/scripts/make-default-entrypoint.sh && \
     rm /go/scripts/make-default-entrypoint.sh
 ########################################################################################################################
@@ -23,12 +25,9 @@ RUN mkdir -p /go/work && \
 # This provides the minimum possible runtime image size
 ########################################################################################################################
 ONBUILD COPY ./ /go
-ONBUILD RUN apk add --no-cache -U libc-dev git go && \
-  /go/scripts/build-toolchain.sh && \
+ONBUILD RUN /go/scripts/build-toolchain.sh && \
   chown -R 1001:0 /usr/local/bin && \
-  chmod -R +x /usr/local/bin && \
-  apk del libc-dev git go && \
-  rm -rf /var/cache/apk/*
+  chmod -R +x /usr/local/bin
 
 WORKDIR /go/work
 ########################################################################################################################

@@ -6,13 +6,10 @@ FROM tomwhiston/micro-golang:base
 
 LABEL maintainer="tom.whiston@gmail.com"
 
-ENV MGL_APP_ROOT="/go/src/app" \
-    MGL_INSTALL=true \
+ENV MGL_INSTALL=true \
     MGL_TEST=true \
     MGL_LINT=true \
-    MGL_CONFIG_PATH="/go/src/app/.mgl" \
     MGL_LINT_CONFIG="gometalinter.json" \
-    MGL_SCRIPT_PRE_INSTALL="pre-install" \
     MGL_SCRIPT_PRE_RUN="pre-run" \
     MGL_SCRIPT_POST_RUN="post-run" \
     MGL_SCRIPT_EXIT="exit"

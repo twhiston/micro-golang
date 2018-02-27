@@ -21,6 +21,8 @@ type ToolchainDescriptor struct {
 	Author  string
 }
 
+var tc = ToolchainDescriptor{}
+
 func toolchainError(err error, context string) {
 	if err != nil {
 		log.Fatalln("	!!! Could not write toolchain file \n", err.Error(), "\n", context)
@@ -28,8 +30,6 @@ func toolchainError(err error, context string) {
 }
 
 func main() {
-
-	tc := ToolchainDescriptor{}
 
 	flag.StringVar(&toolchainFilePath, "f", "toolchain.yml", "path to toolchain.yml file")
 	flag.Parse()
@@ -76,10 +76,11 @@ func main() {
 	}
 
 	//Get path or exit
-	gobin := os.Getenv("TOOLCHAIN_BIN")
-	if gobin == "" {
-		fmt.Println("	TOOLCHAIN_BIN variable is blank, leaving tools in GOBIN")
-		return
-	}
+	//gobin := os.Getenv("TOOLCHAIN_BIN")
+	//if gobin == "" {
+	//	fmt.Println("	TOOLCHAIN_BIN variable is blank, leaving tools in GOBIN")
+	//	return
+	//}
 
+	return
 }

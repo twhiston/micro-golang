@@ -66,7 +66,6 @@ test:
    - task: test:env
    - task: test:integration
    - task: test:toolchain
-   - task: toolchain:build:app
 
 test:env:
   deps: [build]
@@ -106,17 +105,21 @@ ci:build:
 test:toolchain:
   cmds:
     - |
+      set -e
       pushd ./tests/toolchain
         docker build -t "{{ $.NS }}/{{ $.REPO }}:toolchain-test" .
         docker run "{{ $.NS }}/{{ $.REPO }}:toolchain-test"
-        docker run "{{ $.NS }}/{{ $.REPO }}:toolchain-test" task
-        docker run "{{ $.NS }}/{{ $.REPO }}:toolchain-test" goss validate
+        docker run "{{ $.NS }}/{{ $.REPO }}:toolchain-test" task --version
+        docker run "{{ $.NS }}/{{ $.REPO }}:toolchain-test" dep version
       popd
+
+a:
+  cmds:
+    - docker run -it "{{ $.NS }}/{{ $.REPO }}:toolchain-test" /bin/ash
 
 toolchain:build:app:
   cmds:
     - |
-      set -e
       pushd ./context/toolchain/mgl-tcb
         go install
       popd

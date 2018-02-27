@@ -31,6 +31,11 @@ if [[ "$MGL_INSTALL" == "true" ]]; then
     echo "---> Installing Application"
     if [ -e Gopkg.lock ]; then
         echo "---> Using dep ensure"
+        if [ -f "${MGL_CONFIG_PATH}/${MGL_SCRIPT_POST_DEPS}" ]; then
+            echo "---> Running pre-run script"
+            # shellcheck source=/dev/null
+            source "${MGL_CONFIG_PATH}/${MGL_SCRIPT_POST_DEPS}"
+        fi
         dep ensure -v
     else
         echo "---> Using go get"
