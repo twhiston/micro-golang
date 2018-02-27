@@ -65,6 +65,8 @@ test:
   cmds:
    - task: test:env
    - task: test:integration
+   - task: test:toolchain
+   - task: toolchain:build:app
 
 test:env:
   deps: [build]
@@ -99,4 +101,22 @@ ci:build:
     - |
       pushd ./ci
         docker build -t "{{ $.NS }}/{{ $.REPO }}-ci:latest" .
+      popd
+
+test:toolchain:
+  cmds:
+    - |
+      pushd ./tests/toolchain
+        docker build -t "{{ $.NS }}/{{ $.REPO }}:toolchain-test" .
+        docker run "{{ $.NS }}/{{ $.REPO }}:toolchain-test"
+        docker run "{{ $.NS }}/{{ $.REPO }}:toolchain-test" task
+        docker run "{{ $.NS }}/{{ $.REPO }}:toolchain-test" goss validate
+      popd
+
+toolchain:build:app:
+  cmds:
+    - |
+      set -e
+      pushd ./context/toolchain/mgl-tcb
+        go install
       popd

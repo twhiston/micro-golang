@@ -2,11 +2,13 @@ NS: tomwhiston
 REPO: micro-golang
 NAME: micro-golang
 VERSIONS: |
+  base
   prod
   prodv3-builder
   prodv3-runtime
   test-base
   test
+  toolchain
 ENVTESTS: |
   prod
   prodv3-builder

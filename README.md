@@ -104,6 +104,11 @@ The following environmental variables are set in the container and used to deter
 If at any time the above sequence fails and exit is called it will be trapped and `MGL_SCRIPT_EXIT` will be called.
 Additionally as part of the exit script if `CODACY_TOKEN` is set any coverage generated will be shipped to [Codacy](https://www.codacy.com)
 
+Tip: As you need to supply your commit id to codacy and `MGL_SCRIPT_EXIT` is called before the coverage is posted you can easily make the exit script set the variable
+```
+export COMMIT_ID=${CI_COMMIT_ID} #Your ci's commit id variable name
+```
+
 The container additionally adds the script `/go/scripts/hold.sh` which you can use to hold a container open for debug purposes.
 
 This container image will be ~835MB. As most of this comes from the parent the build process will be of good speed.

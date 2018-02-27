@@ -1,0 +1,12 @@
+Micro-golang Toolchain Image
+
+Version: {{ .Version }}
+Updated: {{ .Date }}
+{{ if .Author }}Author: {{ .Author }} {{ end }}
+
+Installed Tools:
+{{ range .Tools -}}
+    {{ . }}
+{{ end -}}
+
+----------------------------------------------------
