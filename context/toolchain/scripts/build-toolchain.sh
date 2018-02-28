@@ -13,8 +13,6 @@ echo "---> Run Toolchain Builder"
 
 echo "---> Cleaning Up"
 rm /go/bin/mgl-tcb
-rm -rf /go/src
-rm -rf /go/pkg
 rm /go/toolchain.yml
 
 echo "---> Toolchain Installed"
